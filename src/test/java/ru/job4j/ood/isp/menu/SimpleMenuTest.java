@@ -30,4 +30,28 @@ public class SimpleMenuTest {
                 .isEqualTo(menu.select("Покормить собаку").get());
         menu.forEach(i -> System.out.println(i.getNumber() + i.getName()));
     }
+
+    @Test
+    public void whenSelectGoToShopItShowCorrectTask() {
+        Menu menu = new SimpleMenu();
+        menu.add(Menu.ROOT, "Сходить в магазин", STUB_ACTION);
+        menu.add(Menu.ROOT, "Покормить собаку", STUB_ACTION);
+        menu.add("Сходить в магазин", "Купить продукты", STUB_ACTION);
+        menu.add("Купить продукты", "Купить хлеб", STUB_ACTION);
+        menu.add("Купить продукты", "Купить молоко", STUB_ACTION);
+        assertThat(menu.select("Сходить в магазин").get().getName()).isEqualTo("Сходить в магазин");
+        assertThat(menu.select("Сходить в магазин").get().getNumber()).isEqualTo("1.");
+
+    }
+
+    @Test
+    public void whenSelectNotExistingTask() {
+        Menu menu = new SimpleMenu();
+        menu.add(Menu.ROOT, "Сходить в магазин", STUB_ACTION);
+        menu.add(Menu.ROOT, "Покормить собаку", STUB_ACTION);
+        menu.add("Сходить в магазин", "Купить продукты", STUB_ACTION);
+        menu.add("Купить продукты", "Купить хлеб", STUB_ACTION);
+        menu.add("Купить продукты", "Купить молоко", STUB_ACTION);
+        assertThat(menu.select("Сходить в баню").isEmpty()).isTrue();
+    }
 }
